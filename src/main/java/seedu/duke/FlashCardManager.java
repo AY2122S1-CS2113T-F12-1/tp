@@ -16,34 +16,34 @@ public class FlashCardManager {
     public static ArrayList<FlashCard> cards = new ArrayList<FlashCard>();
     private static final Logger logger = Logger.getLogger(FlashCardManager.class.getName());
 
-    public static void printNoSlashFoundError() {
+    public void printNoSlashFoundError() {
         System.out.println("\tRemember that a command must contain \"/def\"!");
     }
 
-    public static void printFieldEmptyError() {
+    public void printFieldEmptyError() {
         System.out.println("\tRemember that both sides of the flashcard must be filled in!");
     }
 
-    private static void printInvalidAddFormat() {
+    private void printInvalidAddFormat() {
         System.out.println("\tHey, the command you printed is invalid.");
         System.out.println("\tThe correct command format to add a flash card is as follows:");
         System.out.println("\tadd <word on front> /def <word on back>");
     }
 
-    private static void printDoesNotExistError() {
+    private void printDoesNotExistError() {
         System.out.println("\tThe card you are trying to delete does not exist.");
     }
 
-    private static void printEmptyDescriptionError() {
+    private void printEmptyDescriptionError() {
         System.out.println("\tCan't delete a card with no description!");
     }
 
-    private static void printNewFlashCard(String front, String back) {
+    private void printNewFlashCard(String front, String back) {
         System.out.println("\tAdded card:");
         printCardInfo(front, back);
     }
 
-    private static void printCardInfo(String front, String back) {
+    private void printCardInfo(String front, String back) {
         System.out.println("\tFront: " + front);
         System.out.println("\tBack: " + back);
         if (cards.size() == 1) {
@@ -53,12 +53,12 @@ public class FlashCardManager {
         }
     }
 
-    private static void printDeletedFlashCardMessage(String front, String back) {
+    private void printDeletedFlashCardMessage(String front, String back) {
         System.out.println("\tDeleted card:");
         printCardInfo(front, back);
     }
 
-    public static void prepareToAddFlashCard(String input) {
+    public void prepareToAddFlashCard(String input) {
         try {
             String[] flashCardWords = trimStrings(input);
             addFlashCard(flashCardWords[0], flashCardWords[1]);
@@ -79,7 +79,7 @@ public class FlashCardManager {
      *
      * @param input user's input in its entirety
      */
-    public static void prepareToDeleteFlashCard(String input) {
+    public void prepareToDeleteFlashCard(String input) {
         logger.entering(FlashCardManager.class.getName(), "prepareToDeleteFlashCard");
         logger.setLevel(Level.WARNING);
         logger.log(Level.INFO, "Starting delete process");
@@ -107,7 +107,7 @@ public class FlashCardManager {
      * @return description of card
      * @throws ArrayIndexOutOfBoundsException if description is empty
      */
-    public static String getDescription(String input) throws ArrayIndexOutOfBoundsException {
+    public String getDescription(String input) throws ArrayIndexOutOfBoundsException {
         assert input.length() > 0 : "input string should not be empty, at least have command word";
         return input.split(" ", 2)[1];
     }
@@ -118,7 +118,7 @@ public class FlashCardManager {
      * @param input description of the card to delete
      * @throws CardLiException if card does not exist
      */
-    public static void deleteFlashCard(String input) throws CardLiException {
+    public void deleteFlashCard(String input) throws CardLiException {
         logger.setLevel(Level.WARNING);
         if (cards.size() == 0) {
             throw new CardLiException();
@@ -139,7 +139,7 @@ public class FlashCardManager {
      * @throws CardLiException if the index of the card exceeds the number of flashcards in cards
      *              or index of card is less than 1
      */
-    private static void deleteFlashCardByIndex(String index) throws CardLiException {
+    private void deleteFlashCardByIndex(String index) throws CardLiException {
         logger.setLevel(Level.WARNING);
         int indexToBeRemoved = Integer.parseInt(index) - 1;
         if (!((indexToBeRemoved < cards.size()) && (indexToBeRemoved >= 0))) {
@@ -159,7 +159,7 @@ public class FlashCardManager {
      * @param description user's input (front of the card to be deleted)
      * @throws CardLiException if none of the front of the cards match the description input by user
      */
-    private static void deleteFlashCardByDescription(String description) throws CardLiException {
+    private void deleteFlashCardByDescription(String description) throws CardLiException {
         assert cards.size() > 0 : "cards.size() should be greater than 0";
         for (int i = 0; i < cards.size(); i++) {
             FlashCard card = cards.get(i);
@@ -172,7 +172,7 @@ public class FlashCardManager {
         throw new CardLiException();
     }
 
-    private static boolean hasExactCard(String query, FlashCard card) {
+    private boolean hasExactCard(String query, FlashCard card) {
         return card.getFront().equalsIgnoreCase(query);
     }
 
@@ -182,7 +182,7 @@ public class FlashCardManager {
      * @param input input given by user
      * @return true if input is an integer, false otherwise
      */
-    private static boolean isInteger(String input) {
+    private boolean isInteger(String input) {
         for (int i = 0; i < input.length(); i += 1) {
             if (!Character.isDigit(input.charAt(i))) {
                 return false;
@@ -191,13 +191,13 @@ public class FlashCardManager {
         return true;
     }
 
-    public static String[] trimStrings(String input) throws FieldEmptyException, NoSlashException {
+    public String[] trimStrings(String input) throws FieldEmptyException, NoSlashException {
         int slashIndex = input.indexOf("/def");
         String[] flashCardWords = new String[2];
         if (slashIndex < 3) {
             throw new NoSlashException();
         }
-        flashCardWords[0] = input.substring(3, slashIndex - 1).trim();
+        flashCardWords[0] = input.substring(0, slashIndex - 1).trim();
         flashCardWords[1] = input.substring(slashIndex + 4).trim();
         if (flashCardWords[0].isEmpty() || flashCardWords[1].isEmpty()) {
             throw new FieldEmptyException();
@@ -205,16 +205,16 @@ public class FlashCardManager {
         return flashCardWords;
     }
 
-    public static void addFlashCard(String front, String back) {
+    public void addFlashCard(String front, String back) {
         cards.add(new FlashCard(front, back));
     }
 
     //getter for index of a flashcard
-    public static int getCardIndex(FlashCard card) {
+    public int getCardIndex(FlashCard card) {
         return cards.indexOf(card);
     }
 
-    public static void viewAFlashCard(int cardIndex) {
+    public void viewAFlashCard(int cardIndex) {
         System.out.println("*================FRONT================* "
                 + "*===============BACK==================*");
         System.out.println();
@@ -237,7 +237,7 @@ public class FlashCardManager {
                 + "*=====================================*");
     }
 
-    public static void viewAllFlashCards() {
+    public void viewAllFlashCards() {
         for (int i = 0; i < cards.size(); i++) {
             System.out.println("Card " + (i + 1) + ":");
             viewAFlashCard(i);

@@ -7,9 +7,6 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import static seedu.duke.FlashCardManager.cards;
-import static seedu.duke.FlashCardManager.getFrontOfCard;
-import static seedu.duke.FlashCardManager.getBackOfCard;
 
 
 /**
@@ -24,17 +21,17 @@ public class TestManager {
     /**
      * Goes through all the flashcards and stores the user's responses into answersResponse ArrayList.
      */
-    public static void testAllCardsInOrder() {
+    public static void testAllCardsInOrder(FlashCardManager fcm) {
         logger.setLevel(Level.WARNING);
         logger.log(Level.INFO, "starting test");
 
-        for (FlashCard question : cards) {
+        for (FlashCard question : fcm.cards) {
             logger.log(Level.INFO, "starting to test a new card");
-            int questionNumber = FlashCardManager.getCardIndex(question);
+            int questionNumber = fcm.getCardIndex(question);
             printDividerLine();
             System.out.println("Question " + String.valueOf(questionNumber + 1) + ":");
             //display front of card so that user can understand question
-            System.out.println(getFrontOfCard(questionNumber));
+            System.out.println(fcm.getFrontOfCard(questionNumber));
             System.out.println("Your answer?");
             //get user's answer to the card shown(currently assume user inputs only his/her answer)
             //later version to include question number and parsing to allow for randomised testing
@@ -58,7 +55,7 @@ public class TestManager {
         logger.log(Level.INFO, "Finished test");
         //let user know testing is over
         System.out.println("Test Over");
-        viewTestResult();
+        viewTestResult(fcm);
     }
 
     public static String parseUserResponse(String userResponse) throws FieldEmptyException {
@@ -103,7 +100,7 @@ public class TestManager {
     /**
      * Prints results of test to system output.
      */
-    private static void viewTestResult() {
+    private static void viewTestResult(FlashCardManager fcm) {
         logger.setLevel(Level.WARNING);
         int score = 0;
         logger.log(Level.INFO, "starting test check");
@@ -116,12 +113,12 @@ public class TestManager {
             printDividerLine();
             System.out.println("Question "
                     + String.valueOf(responseNumber + 1)
-                    + ": " + getFrontOfCard(responseNumber));
-            System.out.println("Correct answer: " + getBackOfCard(responseNumber));
+                    + ": " + fcm.getFrontOfCard(responseNumber));
+            System.out.println("Correct answer: " + fcm.getBackOfCard(responseNumber));
             System.out.print("Your answer: ");
             viewAnswer(responseNumber);
 
-            if (getBackOfCard(responseNumber).equals(answersResponse.get(responseNumber).getAnswer())) {
+            if (fcm.getBackOfCard(responseNumber).equals(answersResponse.get(responseNumber).getAnswer())) {
                 score++;
                 printCorrectAnsMessage();
                 logger.log(Level.INFO, "user answer is correct");

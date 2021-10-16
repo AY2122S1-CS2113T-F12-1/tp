@@ -21,4 +21,18 @@ public class ParserTest {
         parser.programLogic();
         assertEquals("", out.toString());
     }
+
+    @Test
+    public void removeCommandWord_provideValidInputForAdd_success() {
+        Parser parser = new Parser();
+        String input = "add to pay /def haraimasu";
+        assertEquals("to pay /def haraimasu", parser.removeCommandWord(input, 3));
+    }
+
+    @Test
+    public void removeCommandWord_provideValidInputForDelete_success() {
+        Parser parser = new Parser();
+        String input = "delete 1";
+        assertEquals("1", parser.removeCommandWord(input, 6));
+    }
 }

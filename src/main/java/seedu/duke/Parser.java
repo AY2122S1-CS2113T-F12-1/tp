@@ -27,19 +27,30 @@ public class Parser {
 
             switch (command) {
             case "add":
-                FlashCardManager.prepareToAddFlashCard(line);
+                String addInput = removeCommandWord(line, 3);
+                FlashCardCategoryManager.prepareToAddCardToDeck(addInput);
                 logger.log(Level.INFO, "add command parsed and executed");
                 break;
+            case "addcat":
+                String addcatInput = removeCommandWord(line, 6);
+                FlashCardCategoryManager.prepareToAddCategory(addcatInput);
+                break;
+            case "viewcat":
+                FlashCardCategoryManager.viewCategories();
+                break;
             case "delete":
-                FlashCardManager.prepareToDeleteFlashCard(line);
+                String deleteInput = removeCommandWord(line, 6);
+                FlashCardCategoryManager.prepareToDeleteCardFromDeck(deleteInput);
                 logger.log(Level.INFO, "delete command parsed and executed");
                 break;
             case "view":
-                FlashCardManager.viewAllFlashCards();
+                String viewInput = removeCommandWord(line, 4);
+                FlashCardCategoryManager.viewOneCategory(viewInput);
                 logger.log(Level.INFO, "view command parsed and executed");
                 break;
             case "test":
-                TestManager.testAllCardsInOrder();
+                String testInput = removeCommandWord(line, 4);
+                FlashCardCategoryManager.testCategory(testInput);
                 logger.log(Level.INFO, "test command parsed and executed");
                 break;
             case "bye":
@@ -51,5 +62,9 @@ public class Parser {
                 logger.log(Level.INFO, "command was unrecognised and could not be parsed");
             }
         }
+    }
+
+    static String removeCommandWord(String input, int index) {
+        return input.substring(index).trim();
     }
 }
